@@ -7,6 +7,7 @@ using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using ChatApp.ExceptionHandler;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,7 +32,6 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IChatService, ChatService>();
 builder.Services.AddScoped<IMessageService, MessageService>();
 builder.Services.AddScoped<IHubService, HubService>();
-builder.Services.AddSignalR();
 
 builder.Services.AddSwaggerGen(opt =>
 {
@@ -74,6 +74,12 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
         ValidateAudience = false
     };
 });
+
+builder.Services.AddExceptionHandler<AppExceptionHandler>();
+builder.Services.AddSignalR();
+builder.Services.AddAuthorization();
+builder.Services.AddMemoryCache();
+
 var app = builder.Build();
 app.UseCors("CorsPolicy");
 app.UseExceptionHandler(_ => { });
@@ -85,7 +91,7 @@ if (app.Environment.IsDevelopment())
 }
 app.UseWebSockets();
 app.UseHttpsRedirection();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
