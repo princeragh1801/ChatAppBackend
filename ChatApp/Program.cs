@@ -15,6 +15,15 @@ var connectionString = builder.Configuration.GetConnectionString("SqlServerConne
 builder.Services.AddDbContext<BackendContext>(options => options.UseSqlServer(connectionString));
 builder.Services.AddControllers();
 
+builder.Services.AddCors(c =>
+{
+    c.AddPolicy("CorsPolicy",
+     options => options.WithOrigins(["http://localhost:3000"])
+    .AllowAnyMethod()
+    .AllowAnyHeader()
+    .AllowCredentials());
+});
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -66,14 +75,15 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
     };
 });
 var app = builder.Build();
-
+app.UseCors("CorsPolicy");
+app.UseExceptionHandler(_ => { });
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.UseWebSockets();
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
