@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace WebSocketDemo.Entites
+namespace ChatApp.Entites
 {
     public class Chat
     {

@@ -1,8 +1,13 @@
+using Microsoft.EntityFrameworkCore;
+using ChatApp.Database;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
+var connectionString = builder.Configuration.GetConnectionString("SqlServerConnectionString");
+builder.Services.AddDbContext<BackendContext>(options => options.UseSqlServer(connectionString));
 builder.Services.AddControllers();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

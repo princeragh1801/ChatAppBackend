@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace WebSocketDemo.Entites
+namespace ChatApp.Entites
 {
     public class User
     {
